@@ -1,3 +1,41 @@
+<?php
+
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $dbname = "user";
+
+    // Create connection
+    $conn = new mysqli($servername, $username, $password, $dbname);
+    
+    // Check connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    } 
+    
+    if(isset($_POST['btnSubmit'])){
+        $items = $_POST['array'];
+        
+        foreach ($items as $item){
+            
+            $arr = array();
+            foreach ($item as $user){
+                array_push($arr,$user);
+            }
+            
+            $sql = "INSERT INTO info (Name, Email, Mobile)
+                VALUES ('$arr[0]', '$arr[1]', '$arr[2]')";
+        
+            if ($conn->query($sql) === TRUE) {
+                echo "New record created successfully";
+            } else {
+                echo "Error: " . $sql . "<br>" . $conn->error;
+            }
+        }
+    }
+    
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,7 +57,7 @@
   <div class="container">
     <div class="jumbotron">
       <h1 class="display-4 text-center">Dynamically Add and Remove<br>HTML with Array</h1><hr>
-      <form action="/action_page.php">
+      <form action="" method="post">
 
         <div id="main">
           <div class="card mb-3">
@@ -34,21 +72,22 @@
               </div>
               <div class="form-group">
                 <label for="name">Name:</label>
-                <input type="text" class="form-control" name="array[0].name">
+                <input type="text" class="form-control" name="array[0][name]">
               </div>
               <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="email" class="form-control" name="array[0].email">
+                <input type="email" class="form-control" name="array[0][email]">
               </div>
               <div class="form-group">
                 <label for="phone">Phone:</label>
-                <input type="number" class="form-control" name="array[0].phone">
+                <input type="number" class="form-control" name="array[0][phone]">
               </div>
+                
             </div>
           </div>
         </div>
 
-        <button type="submit" class="btn btn-primary">Submit</button>
+          <button type="submit" name="btnSubmit" class="btn btn-primary">Submit</button>
       </form> 
     </div> 
   </div>
